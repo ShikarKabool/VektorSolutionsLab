@@ -1,1 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>vEKtor Solutions Lab — Turning Insight into Impact</title>
+<style>
+  :root {
+    --navy:   #0D1B3E;
+    --deep:   #080f1f;
+    --blue:   #1A6EFC;
+    --cyan:   #00D4FF;
+    --gold:   #C9A84C;
+    --gold2:  #F5C842;
+    --slate:  #64748b;
+    --light:  #cbd5e1;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Georgia', serif;
+    background: var(--deep);
+    color: white;
+    overflow-x: hidden;
+  }
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(8,15,31,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: all 0.3s;
+  }
+  .logo {
+    font-size: 1.8rem; font-weight: 700; letter-spacing: -0.5px;
+    text-decoration: none;
+  }
+  .logo .v  { color: var(--blue); }
+  .logo .ek { color: var(--cyan); }
+  .logo .tor{ color: white; }
+  .logo-sub { font-size: 0.6rem; letter-spacing: 0.3em; color: var(--slate); font-family: sans-serif; text-transform: uppercase; }
+  .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+  .nav-links a {
+    color: var(--light); text-decoration: none; font-family: sans-serif;
+    font-size: 0.85rem; letter-spacing: 0.05em; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--cyan); }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    color: white !important; padding: 0.55rem 1.4rem; border-radius: 8px;
+    font-weight: 600; box-shadow: 0 4px 20px rgba(26,110,252,0.4);
+  }
 
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    background: radial-gradient(ellipse 120% 80% at 60% 40%, #0f2560 0%, #0D1B3E 40%, #080f1f 100%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(26,110,252,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,110,252,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+  }
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); opacity: 0.18; pointer-events: none;
+    animation: pulse 8s ease-in-out infinite alternate;
+  }
+  .orb1 { width: 600px; height: 600px; background: var(--blue); top: -100px; right: -100px; }
+  .orb2 { width: 400px; height: 400px; background: var(--cyan); bottom: -80px; left: -80px; animation-delay: -4s; }
+  .orb3 { width: 300px; height: 300px; background: var(--gold); bottom: 20%; right: 20%; animation-delay: -2s; opacity: 0.1; }
+  @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.2); } }
+  .hero-content {
+    position: relative; max-width: 900px; padding: 0 2rem;
+    text-align: center;
+  }
+  .hero-badge {
+    display: inline-block; font-family: sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--cyan); border: 1px solid rgba(0,212,255,0.3);
+    padding: 0.4rem 1.2rem; border-radius: 999px;
+    background: rgba(0,212,255,0.08); margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-h1 {
+    font-size: clamp(3rem, 7vw, 6rem); line-height: 1.05;
+    font-weight: 700; letter-spacing: -1px; margin-bottom: 1.5rem;
+    animation: fadeUp 0.9s 0.1s ease both;
+  }
+  .hero-h1 .accent { color: var(--cyan); }
+  .hero-h1 .gold   { color: var(--gold2); }
+  .hero-tagline {
+    font-family: sans-serif; font-size: 1.15rem; color: var(--light);
+    letter-spacing: 0.08em; margin-bottom: 2.5rem;
+    animation: fadeUp 1s 0.2s ease both;
+  }
+  .hero-tagline span { color: var(--cyan); font-style: normal; }
+  .hero-ctas {
+    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 1s 0.3s ease both;
+  }
+  .btn-primary {
+    display: inline-block; padding: 1rem 2.5rem; border-radius: 12px;
+    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    color: white; text-decoration: none; font-family: sans-serif;
+    font-weight: 700; font-size: 0.95rem; letter-spacing: 0.05em;
+    box-shadow: 0 6px 30px rgba(26,110,252,0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(26,110,252,0.7); }
+  .btn-outline {
+    display: inline-block; padding: 1rem 2.5rem; border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.2); color: white;
+    text-decoration: none; font-family: sans-serif;
+    font-weight: 600; font-size: 0.95rem; letter-spacing: 0.05em;
+    backdrop-filter: blur(6px); background: rgba(255,255,255,0.05);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--cyan); background: rgba(0,212,255,0.08); }
+  .hero-stats {
+    display: flex; gap: 4rem; justify-content: center; margin-top: 5rem;
+    animation: fadeUp 1s 0.5s ease both;
+    flex-wrap: wrap;
+  }
+  .stat-item { text-align: center; }
+  .stat-num { font-size: 2.8rem; font-weight: 700; color: white; line-height: 1; }
+  .stat-num span { color: var(--cyan); }
+  .stat-label { font-family: sans-serif; font-size: 0.75rem; color: var(--slate); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.3rem; }
+  .scroll-hint {
+    position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    font-family: sans-serif; font-size: 0.7rem; color: var(--slate); letter-spacing: 0.15em;
+    animation: bounce 2s ease infinite;
+  }
+  .scroll-hint svg { opacity: 0.5; }
+  @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(6px); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── SECTIONS ── */
+  section { padding: 7rem 4rem; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-family: sans-serif; font-size: 0.7rem; letter-spacing: 0.35em;
+    text-transform: uppercase; color: var(--cyan); margin-bottom: 1rem;
+  }
+  .section-h2 {
+    font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+  .section-sub {
+    font-family: sans-serif; font-size: 1rem; color: var(--light);
+    line-height: 1.8; max-width: 640px;
+  }
+  .divider {
+    width: 60px; height: 3px; margin: 1.5rem 0;
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+    border-radius: 2px;
+  }
+
+  /* ── PROBLEM ── */
+  #problem { background: var(--deep); }
+  .gap-visual {
+    display: grid; grid-template-columns: 1fr auto 1fr; gap: 0;
+    align-items: center; margin: 4rem 0; max-width: 800px; margin-left: auto; margin-right: auto;
+  }
+  .gap-side {
+    padding: 2.5rem 2rem; border-radius: 16px; text-align: center;
+  }
+  .gap-side.intent {
+    background: linear-gradient(135deg, rgba(26,110,252,0.15), rgba(0,212,255,0.08));
+    border: 1px solid rgba(26,110,252,0.3);
+  }
+  .gap-side.reality {
+    background: linear-gradient(135deg, rgba(244,63,94,0.12), rgba(201,168,76,0.08));
+    border: 1px solid rgba(244,63,94,0.25);
+  }
+  .gap-side .label { font-family: sans-serif; font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 0.8rem; }
+  .gap-side.intent .label { color: var(--cyan); }
+  .gap-side.reality .label { color: #F43F5E; }
+  .gap-side .big { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .gap-side .desc { font-family: sans-serif; font-size: 0.8rem; color: var(--slate); line-height: 1.5; }
+  .gap-arrow {
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    padding: 0 1.5rem;
+  }
+  .gap-arrow .gap-label {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); font-family: sans-serif; text-align: center;
+    white-space: nowrap;
+  }
+  .gap-arrow .arrow-line {
+    width: 80px; height: 2px; position: relative;
+    background: linear-gradient(90deg, var(--blue), var(--gold), #F43F5E);
+  }
+  .gap-arrow .arrow-line::after {
+    content: ''; position: absolute; right: -6px; top: -4px;
+    border: 5px solid transparent; border-left-color: #F43F5E;
+  }
+  .problem-cards {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 4rem;
+  }
+  .prob-card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px; padding: 2rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .prob-card:hover { border-color: rgba(26,110,252,0.4); transform: translateY(-4px); }
+  .prob-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .prob-card h3 { font-size: 1rem; margin-bottom: 0.5rem; }
+  .prob-card p { font-family: sans-serif; font-size: 0.82rem; color: var(--slate); line-height: 1.7; }
+
+  /* ── D4 FRAMEWORK ── */
+  #d4 {
+    background: linear-gradient(180deg, var(--deep) 0%, #0D1B3E 50%, var(--deep) 100%);
+    position: relative; overflow: hidden;
+  }
+  #d4::before {
+    content: 'D⁴'; position: absolute; right: -2rem; top: 50%; transform: translateY(-50%);
+    font-size: 20rem; font-weight: 700; color: rgba(26,110,252,0.04);
+    pointer-events: none; line-height: 1;
+  }
+  .d4-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 4rem;
+    position: relative;
+  }
+  .d4-card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 20px; padding: 2.5rem 2rem; position: relative; overflow: hidden;
+    transition: all 0.3s;
+  }
+  .d4-card::before {
+    content: ''; position: absolute; inset: 0; border-radius: 20px;
+    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .d4-card:hover::before { opacity: 0.08; }
+  .d4-card:hover { border-color: rgba(26,110,252,0.5); transform: translateY(-6px); }
+  .d4-card > * { position: relative; }
+  .d4-num {
+    font-size: 3.5rem; font-weight: 700; line-height: 1;
+    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; margin-bottom: 0.5rem;
+  }
+  .d4-card h3 { font-size: 1.3rem; margin-bottom: 0.3rem; }
+  .d4-card .d4-sub { font-size: 0.7rem; color: var(--cyan); letter-spacing: 0.2em; text-transform: uppercase; font-family: sans-serif; margin-bottom: 1rem; }
+  .d4-card p { font-family: sans-serif; font-size: 0.82rem; color: var(--light); line-height: 1.7; }
+  .d4-connector {
+    position: absolute; top: 50%; left: calc(25% - 10px); right: calc(25% - 10px);
+    height: 2px; background: linear-gradient(90deg, var(--blue), var(--cyan));
+    z-index: -1; transform: translateY(-50%);
+  }
+
+  /* ── IP / SERVICES ── */
+  #services { background: var(--deep); }
+  .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 4rem; }
+  .service-card {
+    border-radius: 20px; padding: 2.5rem; border: 1px solid rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.02);
+    transition: border-color 0.3s, transform 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .service-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px; border-radius: 0 0 20px 20px;
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+    transform: scaleX(0); transition: transform 0.3s;
+    transform-origin: left;
+  }
+  .service-card:hover::after { transform: scaleX(1); }
+  .service-card:hover { border-color: rgba(26,110,252,0.35); transform: translateY(-4px); }
+  .service-tag {
+    display: inline-block; font-family: sans-serif; font-size: 0.65rem;
+    letter-spacing: 0.25em; text-transform: uppercase;
+    padding: 0.3rem 0.8rem; border-radius: 999px; margin-bottom: 1.5rem;
+  }
+  .tag-blue { background: rgba(26,110,252,0.15); color: var(--cyan); }
+  .tag-gold { background: rgba(201,168,76,0.15); color: var(--gold2); }
+  .tag-violet { background: rgba(109,40,217,0.15); color: #a78bfa; }
+  .tag-green { background: rgba(16,185,129,0.15); color: #34d399; }
+  .service-card h3 { font-size: 1.4rem; margin-bottom: 0.8rem; }
+  .service-card p { font-family: sans-serif; font-size: 0.83rem; color: var(--light); line-height: 1.75; }
+  .service-trademark { color: var(--cyan); font-size: 0.65em; vertical-align: super; }
+
+  /* ── HUMAN EDGE ── */
+  #human { background: linear-gradient(180deg, var(--deep), #0a1628, var(--deep)); }
+  .human-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 4rem; }
+  .human-card {
+    border-radius: 16px; padding: 2rem; border: 1px solid;
+    transition: transform 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .human-card:hover { transform: translateY(-4px); }
+  .human-card .h-num {
+    font-size: 3rem; font-weight: 700; line-height: 1;
+    opacity: 0.12; position: absolute; bottom: 1rem; right: 1.2rem;
+  }
+  .human-card h3 { font-size: 1.05rem; margin-bottom: 0.5rem; }
+  .human-card p { font-family: sans-serif; font-size: 0.8rem; line-height: 1.65; }
+  .hc1 { background: rgba(26,110,252,0.08);  border-color: rgba(26,110,252,0.25); }
+  .hc2 { background: rgba(0,212,255,0.06);   border-color: rgba(0,212,255,0.2); }
+  .hc3 { background: rgba(245,166,35,0.07);  border-color: rgba(245,166,35,0.2); }
+  .hc4 { background: rgba(16,185,129,0.07);  border-color: rgba(16,185,129,0.2); }
+  .hc5 { background: rgba(244,63,94,0.06);   border-color: rgba(244,63,94,0.18); }
+  .hc6 { background: rgba(109,40,217,0.07);  border-color: rgba(109,40,217,0.22); }
+  .hc1 h3, .hc1 .h-num { color: var(--blue); }
+  .hc2 h3, .hc2 .h-num { color: var(--cyan); }
+  .hc3 h3, .hc3 .h-num { color: var(--gold2); }
+  .hc4 h3, .hc4 .h-num { color: #34d399; }
+  .hc5 h3, .hc5 .h-num { color: #F43F5E; }
+  .hc6 h3, .hc6 .h-num { color: #a78bfa; }
+  .human-card p { color: var(--light); }
+
+  /* ── ABOUT ── */
+  #about {
+    background: linear-gradient(135deg, #080f1f 0%, #0D1B3E 50%, #080f1f 100%);
+    border-top: 1px solid rgba(26,110,252,0.15);
+    border-bottom: 1px solid rgba(26,110,252,0.15);
+  }
+  .about-grid { display: grid; grid-template-columns: 1fr 1.8fr; gap: 5rem; align-items: center; }
+  .founder-portrait {
+    width: 100%; aspect-ratio: 3/4; border-radius: 24px;
+    background: linear-gradient(135deg, #1e3a6e 0%, #0D1B3E 100%);
+    border: 1px solid rgba(26,110,252,0.3);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .founder-portrait::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 30%, rgba(26,110,252,0.2) 0%, transparent 70%);
+  }
+  .founder-initial {
+    font-size: 6rem; font-weight: 700; line-height: 1;
+    background: linear-gradient(135deg, var(--blue), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .founder-caption {
+    position: absolute; bottom: 1.5rem; left: 0; right: 0; text-align: center;
+    font-family: sans-serif; font-size: 0.75rem; color: var(--slate); letter-spacing: 0.1em;
+  }
+  .about-name { font-size: clamp(2rem, 3.5vw, 3rem); margin-bottom: 0.3rem; }
+  .about-title { font-family: sans-serif; font-size: 0.85rem; color: var(--cyan); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .about-body { font-family: sans-serif; font-size: 0.9rem; color: var(--light); line-height: 1.9; margin-bottom: 2rem; }
+  .credential-list { display: flex; flex-direction: column; gap: 0.75rem; }
+  .credential {
+    display: flex; gap: 1rem; align-items: flex-start;
+    padding: 1rem 1.2rem; border-radius: 12px;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+  }
+  .cred-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); margin-top: 0.25rem; flex-shrink: 0; }
+  .cred-text { font-family: sans-serif; font-size: 0.82rem; color: var(--light); line-height: 1.5; }
+  .cred-text strong { color: white; }
+
+  /* ── MOAT ── */
+  #moat { background: var(--deep); }
+  .moat-rings {
+    display: flex; align-items: center; justify-content: center;
+    position: relative; height: 400px; margin: 4rem 0;
+  }
+  .ring {
+    position: absolute; border-radius: 50%;
+    border: 1px solid; display: flex; align-items: center; justify-content: center;
+    transition: transform 0.3s;
+  }
+  .ring:hover { transform: scale(1.03); }
+  .ring1 { width: 140px; height: 140px; border-color: var(--cyan); background: rgba(0,212,255,0.1); flex-direction: column; text-align: center; padding: 1rem; }
+  .ring2 { width: 260px; height: 260px; border-color: var(--blue); background: rgba(26,110,252,0.05); }
+  .ring3 { width: 380px; height: 380px; border-color: var(--gold); background: rgba(201,168,76,0.04); }
+  .ring-label { font-size: 0.75rem; font-weight: 700; line-height: 1.2; }
+  .ring1 .ring-label { color: var(--cyan); }
+  .ring-sub { font-family: sans-serif; font-size: 0.6rem; color: var(--slate); margin-top: 0.2rem; letter-spacing: 0.05em; }
+  .ring-badge {
+    position: absolute; background: var(--deep);
+    border: 1px solid; border-radius: 999px; padding: 0.4rem 1rem;
+    font-family: sans-serif; font-size: 0.7rem; font-weight: 700; white-space: nowrap;
+  }
+  .rb-2 { border-color: var(--blue); color: var(--blue); top: 20px; left: 50%; transform: translateX(-50%); }
+  .rb-3a { border-color: var(--gold); color: var(--gold2); bottom: 12px; left: 30px; }
+  .rb-3b { border-color: var(--gold); color: var(--gold2); bottom: 12px; right: 30px; }
+  .moat-copy { max-width: 720px; margin: 0 auto; text-align: center; font-family: sans-serif; font-size: 0.9rem; color: var(--light); line-height: 1.8; }
+
+  /* ── SCORECARD ── */
+  #scorecard {
+    background: linear-gradient(135deg, var(--navy) 0%, #0a1628 100%);
+    text-align: center;
+  }
+  .scorecard-box {
+    max-width: 760px; margin: 3rem auto 0;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(26,110,252,0.3);
+    border-radius: 24px; padding: 4rem 3rem;
+    position: relative; overflow: hidden;
+  }
+  .scorecard-box::before {
+    content: '48'; position: absolute; font-size: 14rem; font-weight: 700;
+    right: -2rem; top: 50%; transform: translateY(-50%);
+    color: rgba(26,110,252,0.06); line-height: 1; pointer-events: none;
+  }
+  .scorecard-box h3 { font-size: 2rem; margin-bottom: 1rem; }
+  .scorecard-box p { font-family: sans-serif; font-size: 0.9rem; color: var(--light); line-height: 1.8; max-width: 520px; margin: 0 auto 2.5rem; }
+  .domain-pills { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; margin-bottom: 2.5rem; }
+  .domain-pill {
+    font-family: sans-serif; font-size: 0.7rem; letter-spacing: 0.15em;
+    padding: 0.4rem 1rem; border-radius: 999px; border: 1px solid;
+  }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--deep); text-align: center; }
+  .contact-inner { max-width: 640px; margin: 0 auto; }
+  .contact-card {
+    background: linear-gradient(135deg, rgba(26,110,252,0.12), rgba(0,212,255,0.06));
+    border: 1px solid rgba(26,110,252,0.3); border-radius: 24px;
+    padding: 4rem 3rem; margin-top: 4rem;
+  }
+  .contact-details { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1rem; }
+  .contact-row {
+    display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+    font-family: sans-serif; font-size: 0.9rem; color: var(--light);
+  }
+  .contact-row a { color: var(--cyan); text-decoration: none; }
+  .contact-row a:hover { text-decoration: underline; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #040810; border-top: 1px solid rgba(255,255,255,0.05);
+    padding: 3rem 4rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: gap;
+  }
+  .footer-left { display: flex; flex-direction: column; gap: 0.4rem; }
+  .footer-legal { font-family: sans-serif; font-size: 0.75rem; color: var(--slate); }
+  .footer-right { font-family: sans-serif; font-size: 0.75rem; color: var(--slate); text-align: right; }
+  .footer-right a { color: var(--slate); text-decoration: none; margin-left: 1.5rem; }
+  .footer-right a:hover { color: var(--cyan); }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 1.5rem; }
+    .problem-cards, .d4-grid, .human-grid { grid-template-columns: 1fr 1fr; }
+    .services-grid, .about-grid { grid-template-columns: 1fr; }
+    .d4-grid { grid-template-columns: 1fr 1fr; }
+    .hero-stats { gap: 2rem; }
+    .ring3 { width: 320px; height: 320px; }
+    .ring2 { width: 210px; height: 210px; }
+    .ring1 { width: 120px; height: 120px; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+    .footer-right { text-align: center; }
+  }
+  @media (max-width: 580px) {
+    .problem-cards, .human-grid { grid-template-columns: 1fr; }
+    .d4-grid { grid-template-columns: 1fr; }
+    .hero-h1 { font-size: 2.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="navbar">
+  <a href="#hero" class="logo">
+    <span class="v">v</span><span class="ek">EK</span><span class="tor">tor</span>
+    <div class="logo-sub">Solutions Lab</div>
+  </a>
+  <div class="nav-links">
+    <a href="#problem">The Problem</a>
+    <a href="#d4">Framework</a>
+    <a href="#services">Services</a>
+    <a href="#human">Human Edge</a>
+    <a href="#about">About</a>
+    <a href="#contact" class="nav-cta">Get Started</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Embedded Execution · AI-Enabled · Africa & Beyond</div>
+    <h1 class="hero-h1">
+      Closing the<br><span class="accent">Execution Gap</span><span class="gold">™</span>
+    </h1>
+    <p class="hero-tagline">
+      Turning Insight into Impact.<br>
+      <span>At Scale. With Integrity.</span>
+    </p>
+    <div class="hero-ctas">
+      <a href="#scorecard" class="btn-primary">Take the Scorecard™</a>
+      <a href="#d4" class="btn-outline">Explore the Framework</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">40<span>+</span></div>
+        <div class="stat-label">Years of institution building — incontestable evidence</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">7<span>+</span></div>
+        <div class="stat-label">Years transforming SA's largest institution — record R2 trillion tax revenue in 2026</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Proprietary IP frameworks</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">48</div>
+        <div class="stat-label">Questions that diagnose the Execution Gap™</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <svg width="14" height="20" viewBox="0 0 14 20" fill="none"><rect x="1" y="1" width="12" height="18" rx="6" stroke="white" stroke-width="1.5"/><circle cx="7" cy="7" r="2" fill="white"/></svg>
+  </div>
+</section>
+
+<!-- ── PROBLEM ── -->
+<section id="problem">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">The Problem We Solve</div>
+      <h2 class="section-h2">Most Organisations Know<br>What to Do. Few Actually Do It.</h2>
+      <div class="divider"></div>
+      <p class="section-sub">The Execution Gap™ is the persistent, costly distance between what an organisation intends and what it actually achieves. It is not a strategy problem. It is an execution problem — and it requires a fundamentally different kind of intervention.</p>
+    </div>
+
+    <div class="gap-visual reveal">
+      <div class="gap-side intent">
+        <div class="label">Strategic Intent</div>
+        <div class="big">Vision.<br>Strategy.<br>Plans.</div>
+        <div class="desc">Clearly articulated.<br>Expertly presented.<br>Broadly endorsed.</div>
+      </div>
+      <div class="gap-arrow">
+        <div class="gap-label">The Execution<br>Gap™</div>
+        <div class="arrow-line"></div>
+      </div>
+      <div class="gap-side reality">
+        <div class="label">Operational Reality</div>
+        <div class="big">Drift.<br>Friction.<br>Underperformance.</div>
+        <div class="desc">Misaligned priorities.<br>Slow decisions.<br>AI not yet embedded.</div>
+      </div>
+    </div>
+
+    <div class="problem-cards reveal">
+      <div class="prob-card">
+        <div class="prob-icon">⚡</div>
+        <h3>Decision Paralysis</h3>
+        <p>Decisions stall at the wrong levels. Authority is either over-centralised or unclear. Speed of response fails to match the pace of the environment.</p>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">🤖</div>
+        <h3>AI Without Integration</h3>
+        <p>AI tools are acquired but not embedded. Pilots proliferate without production-grade deployment. The productivity dividend remains unrealised.</p>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">🧩</div>
+        <h3>Siloed Execution</h3>
+        <p>Functions operate as independent kingdoms. Handoffs fail. The organisation experiences itself as coherent; clients experience it as fragmented.</p>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">📊</div>
+        <h3>Strategy–Reality Disconnect</h3>
+        <p>Strategic priorities are not translated into operational mandates. Resource allocation follows history, not strategy. The gap widens every quarter.</p>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">🔄</div>
+        <h3>Change That Does Not Stick</h3>
+        <p>Transformations are launched with energy and abandoned under pressure. There is no mechanism for embedding change into the operating culture.</p>
+      </div>
+      <div class="prob-card">
+        <div class="prob-icon">🧠</div>
+        <h3>Human Edge Erosion</h3>
+        <p>As AI scales, uniquely human capacities — Judgement, Curiosity, Stewardship — are left undeveloped. The organisation becomes brittle at precisely the moments it needs to be resilient.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── D4 FRAMEWORK ── -->
+<section id="d4">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">The Solution Architecture</div>
+      <h2 class="section-h2">The D<sup>4</sup> Framework<sup>™</sup></h2>
+      <div class="divider"></div>
+      <p class="section-sub">Four sequential, reinforcing stages that move an organisation from diagnostic clarity to institutionalised execution capability. Not advisory. Not a report. <em>Embedded.</em></p>
+    </div>
+
+    <div class="d4-grid reveal">
+      <div class="d4-card">
+        <div class="d4-num">01</div>
+        <div class="d4-sub">Find the Friction</div>
+        <h3>Diagnose</h3>
+        <p>We deploy the Execution Gap Scorecard™ — 48 statements across 6 domains — to identify precisely where execution is failing and why. No assumptions. Only evidence.</p>
+      </div>
+      <div class="d4-card">
+        <div class="d4-num">02</div>
+        <div class="d4-sub">Build the Lab</div>
+        <h3>Design</h3>
+        <p>Problem Posing Paradigm™ workshops reframe the right questions. We architect AI-enabled workflows and an operating model sprint plan with defined outcomes and success metrics.</p>
+      </div>
+      <div class="d4-card">
+        <div class="d4-num">03</div>
+        <div class="d4-sub">Prove Impact, Fast</div>
+        <h3>Deliver</h3>
+        <p>vEKtor practitioners embed alongside your team — not above them. 2-week sprint cycles. Real-time dashboards. Progressive capability transfer. Results that are visible and measurable.</p>
+      </div>
+      <div class="d4-card">
+        <div class="d4-num">04</div>
+        <div class="d4-sub">Make It Self-Sustaining</div>
+        <h3>Diffuse</h3>
+        <p>Internal champions are certified. Methodology is institutionalised. Quarterly Scorecard re-assessments sustain focus. The gain becomes permanent — not episodic.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section id="services">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">Proprietary Services</div>
+      <h2 class="section-h2">Four Interlocking<br>IP Platforms</h2>
+      <div class="divider"></div>
+      <p class="section-sub">Every vEKtor engagement is anchored in proprietary, defensible intellectual property — not borrowed frameworks. Our IP is the product.</p>
+    </div>
+    <div class="services-grid reveal">
+      <div class="service-card">
+        <div class="service-tag tag-blue">Diagnostic · Foundation</div>
+        <h3>Execution Gap Scorecard<span class="service-trademark">™</span></h3>
+        <p>A 48-statement diagnostic instrument spanning six execution domains — Strategic Coherence, Decision Velocity, AI Integration Maturity, Organisational Integration, Human Execution Capacity, and Transformation Resilience. The Scorecard returns a quantified gap profile and a prioritised intervention roadmap. It is the entry point for every vEKtor engagement.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-tag tag-gold">Epistemological · Practice</div>
+        <h3>Problem Posing Paradigm<span class="service-trademark">™</span></h3>
+        <p>Most organisations are brilliant at solving the wrong problems with great precision. The Problem Posing Paradigm™ is a structured facilitation methodology that reframes organisational challenges at the root — replacing inherited problem definitions with the right questions. In an AI era of confident-sounding outputs, the human capacity to pose better problems is a decisive competitive advantage.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-tag tag-violet">Competency · Development</div>
+        <h3>Human Edge Certification<span class="service-trademark">™</span></h3>
+        <p>A three-tier certification programme developing the six irreplaceable human capacities — Judgement, Curiosity, Professional Scepticism, Empathy, Stewardship, and Domain Knowledge. Delivered in partnership with leading institutions, the Human Edge Certification™ equips leaders to work alongside AI with authority, discernment, and accountability — not anxiety.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-tag tag-green">Executive · Advisory</div>
+        <h3>Execution Lab Sprint<span class="service-trademark">™</span></h3>
+        <p>An intensive 90-day embedded engagement applying the full D⁴ Framework™. A dedicated vEKtor team works alongside your leadership — not behind glass — to close specific, high-priority execution gaps. Each Sprint is scoped against Scorecard findings and closes with a self-sustaining Diffuse plan. This is not consulting. This is execution partnership.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HUMAN EDGE ── -->
+<section id="human">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">The Human Edge Competency Model</div>
+      <h2 class="section-h2">Six Capacities AI<br>Cannot Replicate</h2>
+      <div class="divider"></div>
+      <p class="section-sub">As AI absorbs technical work, competitive advantage migrates to distinctly human capacities. Organisations that develop these systematically will compound their lead. Those that neglect them will find their AI investments brittle and prone to failure at the critical moments.</p>
+    </div>
+    <div class="human-grid reveal">
+      <div class="human-card hc1">
+        <div class="h-num">01</div>
+        <h3>Judgement</h3>
+        <p>Sound decision-making under ambiguity, time pressure, and incomplete information — where AI produces probabilities but humans must decide and account for the consequences.</p>
+      </div>
+      <div class="human-card hc2">
+        <div class="h-num">02</div>
+        <h3>Curiosity</h3>
+        <p>The disciplined habit of questioning outputs, challenging norms, and pursuing the second-order question that AI has not been prompted to ask.</p>
+      </div>
+      <div class="human-card hc3">
+        <div class="h-num">03</div>
+        <h3>Professional Scepticism</h3>
+        <p>The rigorous practice of interrogating AI-generated outputs with domain expertise — not blind trust, and not reflexive rejection. The calibrated challenge.</p>
+      </div>
+      <div class="human-card hc4">
+        <div class="h-num">04</div>
+        <h3>Empathy</h3>
+        <p>Reading the human dimensions of decisions — the unspoken concerns, the social dynamics, the lived experience that no model fully captures but every consequential decision must account for.</p>
+      </div>
+      <div class="human-card hc5">
+        <div class="h-num">05</div>
+        <h3>Stewardship</h3>
+        <p>Acting as a custodian of long-term institutional value — making decisions that a future generation of stakeholders will judge as responsible, proportionate, and just.</p>
+      </div>
+      <div class="human-card hc6">
+        <div class="h-num">06</div>
+        <h3>Domain Knowledge</h3>
+        <p>The deep, experiential expertise that enables a practitioner to know when AI is correct, when it is plausible but wrong, and when it is confidently fabricating.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="founder-portrait">
+          <div class="founder-initial">EK</div>
+          <div class="founder-caption">Edward Kieswetter · Founder & CEO</div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="section-label">Founder Authority</div>
+        <h2 class="about-name">Edward Kieswetter</h2>
+        <div class="about-title">Founder & CEO · Scholarly and Reflective Practitioner</div>
+        <div class="divider"></div>
+        <p class="about-body">
+          Edward Kieswetter built vEKtor Solutions Lab on a credential that no competitor can replicate: seven years as Commissioner of the South African Revenue Service, during which he led one of the most consequential institutional transformations on the African continent — rebuilding trust, embedding technology and AI workflows, and recovering over R1.6 trillion in compliance revenue over 7 years from a position of near-institutional collapse.
+        </p>
+        <p class="about-body" style="margin-top: -1rem;">
+          His career spans power generation, financial services, tax and customs administration, cognitive science, and executive education. He is not a theorist who advises on execution. He is a practitioner who has done it — at scale, under scrutiny, and with measurable results. That is the proof that drives vEKtor's positioning.
+        </p>
+        <div class="credential-list">
+          <div class="credential">
+            <div class="cred-dot"></div>
+            <div class="cred-text"><strong>Commissioner, SARS</strong> — Led Modernisation 3.0, AI deployment (LWAZI, PULSE), and Smart Border Reform across seven years of transformational leadership.</div>
+          </div>
+          <div class="credential">
+            <div class="cred-dot"></div>
+            <div class="cred-text"><strong>Cognitive Science & Executive Education</strong> — Affiliation with the Da Vinci Institute; long-standing investment in the intersection of learning, leadership, and systems thinking.</div>
+          </div>
+          <div class="credential">
+            <div class="cred-dot"></div>
+            <div class="cred-text"><strong>Cross-sector Leadership</strong> — Power generation, financial services, and public sector — a rare portfolio that grounds institutional transformation in commercial discipline.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MOAT ── -->
+<section id="moat">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center; max-width: 660px; margin: 0 auto;">
+      <div class="section-label">Competitive Moat</div>
+      <h2 class="section-h2">Three Rings of Defensible Advantage</h2>
+      <div class="divider" style="margin: 1.5rem auto;"></div>
+      <p class="section-sub" style="margin: 0 auto;">Our competitive position is not a single capability — it is a self-reinforcing system of three concentric advantages, each of which strengthens the others.</p>
+    </div>
+    <div class="moat-rings reveal">
+      <div class="ring ring3">
+        <div class="ring-badge rb-3a">Diagnostic Product</div>
+        <div class="ring-badge rb-3b">Certification Ecosystem</div>
+      </div>
+      <div class="ring ring2">
+        <div class="ring-badge rb-2">Embedded Execution IP</div>
+      </div>
+      <div class="ring ring1">
+        <div class="ring-label" style="color:var(--cyan);">Founder<br>Authority</div>
+        <div class="ring-sub">Proof over<br>Promise</div>
+      </div>
+    </div>
+    <p class="moat-copy reveal">At the core: a founder credential no competitor can manufacture. Around it: proprietary diagnostic and execution IP that deepens with every engagement. At the perimeter: a certification ecosystem that creates a recurring community of practitioners — compounding the moat with every cohort.</p>
+  </div>
+</section>
+
+<!-- ── SCORECARD ── -->
+<section id="scorecard">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center;">
+      <div class="section-label">Start Here</div>
+      <h2 class="section-h2">Take the Execution Gap<br>Scorecard<sup>™</sup></h2>
+      <div class="divider" style="margin: 1.5rem auto;"></div>
+    </div>
+    <div class="scorecard-box reveal">
+      <h3>48 Statements. Six Domains.<br>One Diagnostic Truth.</h3>
+      <p>In 60–90 minutes, the Scorecard returns a quantified execution gap profile, domain-level insights, and a prioritised recommendation set — powered by AI analysis and benchmarked against best-practice execution standards. This is where every vEKtor engagement begins.</p>
+      <div class="domain-pills">
+        <div class="domain-pill" style="border-color:rgba(26,110,252,0.4);color:var(--cyan);">Strategic Coherence</div>
+        <div class="domain-pill" style="border-color:rgba(0,180,160,0.4);color:#00B4A0;">Decision Velocity</div>
+        <div class="domain-pill" style="border-color:rgba(109,40,217,0.4);color:#a78bfa;">AI Integration Maturity</div>
+        <div class="domain-pill" style="border-color:rgba(245,166,35,0.4);color:var(--gold2);">Organisational Integration</div>
+        <div class="domain-pill" style="border-color:rgba(0,212,255,0.4);color:var(--cyan);">Human Execution Capacity</div>
+        <div class="domain-pill" style="border-color:rgba(244,63,94,0.4);color:#F43F5E;">Transformation Resilience</div>
+      </div>
+      <a href="#" class="btn-primary" onclick="alert('The interactive Scorecard™ app is available as a separate module. Contact vEKtor to access it.'); return false;">
+        Begin Your Assessment →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="contact-inner">
+      <div class="reveal" style="text-align:center;">
+        <div class="section-label">Get Started</div>
+        <h2 class="section-h2">Ready to Close the Gap?</h2>
+        <div class="divider" style="margin: 1.5rem auto;"></div>
+        <p class="section-sub" style="margin: 0 auto; text-align:center;">Every execution gap is a recoverable position — with the right diagnostic clarity and embedded support. Start with a conversation.</p>
+      </div>
+      <div class="contact-card reveal">
+        <h3 style="font-size:1.5rem; margin-bottom:0.5rem;">Book a Strategic Diagnostic</h3>
+        <p style="font-family:sans-serif; font-size:0.85rem; color:var(--slate);">A focused 60-minute session with Edward Kieswetter to assess your Execution Gap and identify the highest-return entry point.</p>
+        <div class="contact-details">
+          <div class="contact-row">
+            <span>📧</span>
+            <a href="mailto:ed@vektorsolutionslab.ai">ed@vektorsolutionslab.ai</a>
+          </div>
+          <div class="contact-row">
+            <span>📞</span>
+            <span>+27 83 452 4443</span>
+          </div>
+          <div class="contact-row">
+            <span>🌍</span>
+            <span>Johannesburg, South Africa · Global engagements welcomed</span>
+          </div>
+        </div>
+        <div style="margin-top:2.5rem;">
+          <a href="mailto:edward@vektorlab.ai" class="btn-primary">Request a Conversation →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-left">
+    <div class="logo" style="font-size:1.4rem;">
+      <span class="v">v</span><span class="ek">EK</span><span class="tor">tor</span>
+      <span style="font-size:0.6rem; letter-spacing:0.3em; color:var(--slate); font-family:sans-serif; text-transform:uppercase; margin-left:0.5rem;">Solutions Lab</span>
+    </div>
+    <div class="footer-legal">Turning Insight into Impact. At Scale. With Integrity.</div>
+    <div class="footer-legal" style="margin-top:0.3rem;">© 2026 vEKtor Solutions Laboratory. All rights reserved.</div>
+    <div class="footer-legal" style="margin-top:0.2rem;">Execution Gap™ · D⁴ Framework™ · Problem Posing Paradigm™ · Human Edge Certification™ are proprietary trademarks.</div>
+  </div>
+  <div class="footer-right">
+    <a href="#problem">The Problem</a>
+    <a href="#d4">Framework</a>
+    <a href="#services">Services</a>
+    <a href="#human">Human Edge</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+  // ── Scroll reveal ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ── Nav shrink on scroll ──
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (window.scrollY > 60) {
+      nav.style.padding = '0.7rem 4rem';
+    } else {
+      nav.style.padding = '1.2rem 4rem';
+    }
+  });
+</script>
+</body>
+</html>
